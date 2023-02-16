@@ -50,3 +50,12 @@
     background: #04050a;
     border-radius: 100vh;
 }
+
+pre {
+    border-radius: 1rem;
+    background: rgba(11, 11, 12, 0.73);
+}
+
+.embed {
+    position: relative;
+}

@@ -174,12 +174,54 @@ class Component {
   }
 }
 
+class iFrameCopier extends Component {
+  constructor (renderHookId, className) {
+    super(renderHookId, false)
+    this.name = className
+    this.text = `
+      <iframe src="https://nateayye.github.io/color-palette/" 
+              sandbox="allow-modals allow-scripts allow-popups allow-same-origin"
+              allow="clipboard-read; clipboard-write"
+              width="100%"
+              height="790px" 
+              style="border: 0;">
+      </iframe>
+    `
+    this.render()
+  }
+
+  copy = () => {
+    const copyBtn = document.querySelector('.iframe-copy-btn')
+    const copyBtnText = copyBtn.innerText
+    copyBtn.innerText = 'Copied!!'
+    setTimeout(() => {
+      copyBtn.innerText = copyBtnText
+    }, 1000)
+    navigator.clipboard.writeText(`${this.text}`)
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
+
+  render() {
+    this.element = this.createElement('pre', 'embed', [
+      new ElementAttribute('id', this.name)
+    ])
+    this.element.innerText = this.text
+    this.copyBtn = this.createElement('button', 'iframe-copy-btn', [], this.name)
+    this.copyBtn.innerText = 'Copy Me'
+    this.copyBtn.addEventListener('click', this.copy)
+  }
+}
 
 class Color extends Component {
   constructor (renderHookId, color) {
     super(renderHookId, false)
     this.color = color;
     this.render()
+  }
+
+  copy = async () => {
+    await navigator.clipboard.writeText(this.color)
   }
 
   render() {
@@ -189,7 +231,7 @@ class Color extends Component {
     this.element.style.backgroundColor = this.color
     this.element.innerHTML = `
       <h3>${this.color}</h3>
-      <button class="copyBtn">
+      <button class="copyBtn" onclick="this.copy()">
         <svg height="15px" id="Layer_1"  viewBox="0 0 500 500" xml:space="preserve">
           <g>
             <g>
@@ -214,7 +256,6 @@ class Color extends Component {
   }
 }
 
-
 class ColorPalette extends Component {
   colors = []
   constructor (renderHookId, colors) {
@@ -236,6 +277,7 @@ class ColorPalette extends Component {
 class App {
   static init() {
     new ColorPalette('app', COLORS)
+    new iFrameCopier('app', 'iframe-copy')
   }
 }
 
