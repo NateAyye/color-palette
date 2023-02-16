@@ -206,13 +206,9 @@ class Color extends Component {
         COPY!
       </button>
     `;
-    this.element.addEventListener('click', () => {
-      navigator.clipboard.writeText(this.color)
-        .then(res => {
-          alert(`Copied ${this.color} to clipboard`)
-          console.log(res)
-        })
-        .catch((err) => {console.log(err)})
+    this.element.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(this.color)
+      alert(`Copied ${this.color} to clipboard`)
 
     })
   }
