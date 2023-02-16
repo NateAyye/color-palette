@@ -29,3 +29,15 @@
     cursor: pointer;
 
 }
+
+::-webkit-scrollbar {
+    width: .5rem;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #151515;
+    border-radius: 100vh;
+}
