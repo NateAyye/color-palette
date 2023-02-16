@@ -190,7 +190,7 @@ class Color extends Component {
     this.element.innerHTML = `
       <h3>${this.color}</h3>
       <button class="copyBtn">
-        <svg height="15px" id="Layer_1"  version="1.1" viewBox="0 0 500 500" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg height="15px" id="Layer_1"  viewBox="0 0 500 500" xml:space="preserve">
           <g>
             <g>
               <path d="M160,160h192c-1.7-20-9.7-35.2-27.9-40.1c-0.4-0.1-0.9-0.3-1.3-0.4c-12-3.4-20.8-7.5-20.8-20.7V78.2    c0-25.5-20.5-46.3-46-46.3c-25.5,0-46,20.7-46,46.3v20.6c0,13.1-8.8,17.2-20.8,20.6c-0.4,0.1-0.9,0.4-1.4,0.5    C169.6,124.8,161.9,140,160,160z M256,64.4c7.6,0,13.8,6.2,13.8,13.8c0,7.7-6.2,13.8-13.8,13.8c-7.6,0-13.8-6.2-13.8-13.8    C242.2,70.6,248.4,64.4,256,64.4z"/>
@@ -206,7 +206,7 @@ class Color extends Component {
         COPY!
       </button>
     `;
-    this.element.addEventListener('click', (e) => {
+    this.element.addEventListener('click', () => {
       navigator.clipboard.writeText(this.color)
         .then(res => {
           alert(`Copied ${this.color} to clipboard`)
@@ -239,7 +239,7 @@ class ColorPalette extends Component {
 
 class App {
   static init() {
-    const palette = new ColorPalette('app', COLORS)
+    new ColorPalette('app', COLORS)
   }
 }
 
