@@ -1,0 +1,29 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+}
+
+
+.palette {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.color {
+ width: 100px;
+ height: 100px;
+    display: grid;
+    place-items: center;
+}
+
+.copyBtn {
+    font-weight: 600;
+    align-items: center;
+    text-align: center ;
+    border: none;
+    border-radius: .5em;
+    cursor: pointer;
+
+}
