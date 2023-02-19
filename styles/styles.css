@@ -47,5 +47,37 @@ body {
 .active-color {
     transform: scale(1.5);
 }
+#grids {
+    position: absolute;
+    min-height: inherit;
+    width: 100%;
+}
+
+.hex-grid {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    left: 50%;
+    top: 50%;
+    background: #04050a55;
+    border-radius: 50%;
+
+    transform: translate(-50%, -50%) rotate(0);
+
+}
+
+.inner {
+    width: 50%;
+    height: 50%;
+    align-items: center;
+    font-size: 0; /* disable white space between inline block element */
+}
+
+.hex-tile {
+    display: inline-block;
+    width: var(--hex-width) ;
+    height: var(--hex-width) ;
+    background: #a0ffff;
+}
 
 
