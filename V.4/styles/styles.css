@@ -1,0 +1,51 @@
+:root {
+    --palette-padding: 1rem ;
+    --palette-diamiter: 400;
+    --palette-radius: 200;
+
+    --hex-width: 30px;
+    --hex-grid-padding: 2rem;
+
+}
+
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+}
+
+#app {
+    min-height: inherit;
+}
+
+#palette {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(0);
+
+    transition: transform 500ms ease-in-out;
+}
+
+.colors {
+    position: absolute;
+    border-radius: 50%;
+
+
+    transition: transform 0.2s ease;
+}
+
+.colors:hover {
+    transform: scale(1.5);
+}
+.active-color {
+    transform: scale(1.5);
+}
+
+

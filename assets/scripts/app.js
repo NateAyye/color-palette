@@ -181,7 +181,7 @@ class iFrameCopier extends Component {
     this.text = `
       <iframe src="https://nateayye.github.io/color-palette/" 
               sandbox="allow-modals allow-scripts allow-popups allow-same-origin"
-              allow="clipboard-read; clipboard-write"
+              allow="clipboard-read; clipboard-write "
               width="100%"
               height="790px" 
               style="border: 0;">

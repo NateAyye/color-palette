@@ -1,0 +1,46 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300);
+:root {
+    --palette-diamiter: 400;
+}
+body {
+    margin: 0 auto;
+    background: rgb(198, 193, 173 );
+}
+
+#app {
+    height: 100vh;
+
+}
+
+.colors.active-color {
+    transform:scale(1.5);
+}
+
+.hex-grid-container {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.15);
+    display: none;
+    flex-wrap: wrap;
+    width: 400px;
+    height: 400px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: transform 400ms ease-out;
+
+}
+
+.hex {
+    width: 50px;
+    height: 50px;
+    background: #a0ffff;
+    display: inline-block;
+    font-size:initial;
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    margin-bottom: calc(var(--m) - var(--s) * 0.2885);
+
+
+    transition: transform 500ms ease-in-out;
+}
+
+

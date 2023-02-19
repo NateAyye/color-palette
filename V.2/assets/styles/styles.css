@@ -1,0 +1,39 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+#palette {
+    background: #efefef;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.color-palette-tab {
+    height: 20px;
+    aspect-ratio: 1;
+    cursor: pointer;
+}
+.color-palette-tab:hover {
+    transform: scale(1.1);
+}
+
+.varients {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.varient {
+    width: 100px;
+    aspect-ratio: 1;
+}
+
+
+
