@@ -36,24 +36,25 @@ body {
 .colors {
     position: absolute;
     border-radius: 50%;
-
+    cursor: pointer;
 
     transition: transform 0.2s ease;
 }
 
 .colors:hover {
-    transform: scale(1.5);
+    transform: scale(2);
 }
 .active-color {
-    transform: scale(1.5);
-}
-#grids {
-    position: absolute;
-    min-height: inherit;
-    width: 100%;
+    transform: scale(2);
 }
 
+
 .hex-grid {
+
+    --s: 50px;  /* size  */
+    --m: 4px;    /* margin */
+    --f: calc(var(--s) * 1.732 + 4 * var(--m) - 1px);
+
     position: absolute;
     display: grid;
     place-items: center;
@@ -67,17 +68,79 @@ body {
 }
 
 .inner {
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
     align-items: center;
+    display: inline-block;
+    transform: translate(5px, 14px);
+
     font-size: 0; /* disable white space between inline block element */
 }
 
+
 .hex-tile {
+    z-index: 200;
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s) * 1.1547);
+    background: hsl(0 100% 90%);
     display: inline-block;
-    width: var(--hex-width) ;
-    height: var(--hex-width) ;
+    font-size: initial;
+    cursor: pointer;
+    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+    margin-bottom: calc(var(--m) - var(--s) * 0.2885);
+    transition: transform 500ms ease-in-out;
+}
+
+.hex-tile:hover {
+    transform: scale(1.3);
+
+    transition: transform 200ms ease-out;
+}
+
+.inner::before {
+    content: "";
+    width: calc(var(--s) / 2 + var(--m));
+    float: left;
+    height: 120%;
+    shape-outside: repeating-linear-gradient(#0000 0 calc(var(--f) - 3px), #000 0 var(--f));
+}
+
+.inner div:is(:nth-last-child(3), :first-of-type ) {
+    margin-left: calc(var(--s) + (var(--m) * 3));
+}
+
+.selector {
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
     background: #a0ffff;
 }
 
+@keyframes fade-out {
+    0% {
+        opacity: 100%;
+    }
 
+    100% {
+        opacity: 0;
+    }
+}
+
+.alert {
+    font-size: 20px;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: 700;
+    position: fixed;
+    display: grid;
+    place-items: center;
+    top: 0;
+    right:0;
+    left: 0;
+    height: 3rem;
+    background: #00ff80;
+    color: white;
+    animation: fade-out 2500ms ease-out;
+}
