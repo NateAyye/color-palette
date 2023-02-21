@@ -81,7 +81,6 @@ class HexGrid extends Component {
         const rgbString = tile.style.background
         const select = document.getElementById('color-space')
         let colorFunction
-        console.log(select.selectedOptions[0].innerText)
         switch (select.selectedOptions[0].innerText) {
           case 'HEX':
             colorFunction = ColorHelper.CssRGBToHex(rgbString)
@@ -92,6 +91,7 @@ class HexGrid extends Component {
           case 'RGB':
             colorFunction = rgbString
         }
+
 
         navigator.clipboard.writeText(colorFunction)
           .then(r => {
@@ -113,12 +113,18 @@ class HexGrid extends Component {
     inner.className = 'inner'
     for (let i = 0; i < this.tileAmount; i++) {
       const hex = document.createElement('div')
+      const parent = document.createElement('div')
       hex.className = 'hex-tile'
       hex.id = `${this.id}-tile-${i + 1}`
       hex.style.cursor = 'pointer'
-      if (i < 10) hex.style.background = `hsl(${this.hue} ${(i + 1) * 10}% 50% )`
+      let decrement = 10
+      if (i < 10) {
+        decrement -= i
+        hex.style.background = `hsl(${this.hue} ${(i + 1) * 10}% ${(i + 1) * 5}% )`
+      }
       if (i > 9) hex.style.background = `hsl(${this.hue} 100% ${50 + ((i - 10) * 5)}%)`
-      inner.append(hex)
+      parent.append(hex)
+      inner.append(parent)
       this.hexTiles.push(hex)
       if(i === 2 || i === 6 || i === 11 || i === 15 ) {
         const breakPoint = document.createElement('br')

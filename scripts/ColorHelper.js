@@ -24,7 +24,6 @@ class ColorHelper {
 
     for (let R in rgb) {
       let r = rgb[R];
-      console.log(r)
       if (r.indexOf("%") > -1)
         rgb[R] = Math.floor(r.substring(0, r.length - 1) / 100 * 255);
     }

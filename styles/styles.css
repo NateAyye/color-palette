@@ -72,7 +72,7 @@ body {
     height: 100%;
     align-items: center;
     display: inline-block;
-    transform: translate(5px, 14px);
+    transform: translate(-57px, 11px);
 
     font-size: 0; /* disable white space between inline block element */
 }
@@ -84,11 +84,8 @@ body {
     margin: var(--m);
     height: calc(var(--s) * 1.1547);
     background: hsl(0 100% 90%);
-    display: inline-block;
-    font-size: initial;
     cursor: pointer;
     clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
-    margin-bottom: calc(var(--m) - var(--s) * 0.2885);
     transition: transform 500ms ease-in-out;
 }
 
@@ -110,6 +107,22 @@ body {
     margin-left: calc(var(--s) + (var(--m) * 3));
 }
 
+div:has(> .hex-tile) {
+
+    width: var(--s);
+    margin: var(--m);
+    height: calc(var(--s) * 1.1547);
+    display: inline-block;
+    font-size: initial;
+    cursor: pointer;
+    margin-bottom: calc(var(--m) - var(--s) * 0.2885);
+
+}
+
+div:has(> .hex-tile:hover) {
+    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));
+}
+
 .selector {
     text-align: center;
     position: fixed;
@@ -128,6 +141,9 @@ body {
         opacity: 0;
     }
 }
+
+
+
 
 .alert {
     font-size: 20px;
