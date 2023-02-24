@@ -48,6 +48,7 @@ class Alert extends Component {
     }, 2500)
   }
 }
+
 class HexTile extends Component {
   constructor (parentId,) {
     super(parentId, false)
