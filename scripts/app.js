@@ -76,7 +76,7 @@ class ColorWheel extends Component {
     this.currColorPickerRadius = (this.size * .035)
     this.thickness = ((this.radius * .9) - (gap * layers)) / layers;
     this.render();
-    this.createColorPicker()
+    this.createColorPicker();
   }
 
   convertCentralAngle(arcLength, radius) {
