@@ -1,4 +1,3 @@
-
 /*    CSS Reset     */
 /*  Resource: https://piccalil.li/blog/a-modern-css-reset/  */
 
@@ -73,36 +72,3 @@ a {
 }
 
 /*    End of CSS Reset     */
-
-
-
-#app {
-    min-height: 100vh;
-}
-
-
-
-.mobile-palette {
-    position: fixed;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    inset: 0 0 0 auto;
-    background: #24292e;
-}
-
-
-.m-main-color {
-    cursor: pointer;
-    transform: scale(1);
-    transition: transfrom 1s ease-out;
-}
-.m-main-color:hover {
-    transform: scale(1.2);
-}
-
-.center-grid {
-    clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
-    background: #24292e55;
-}
-

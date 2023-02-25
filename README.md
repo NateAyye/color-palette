@@ -20,10 +20,10 @@ Provide a short description explaining the what, why, and how of your project. U
 - I Was Having a huge problem with the way I wanted it to be styled and layed out.
   - First there was the problem of having A circular design that i wanted and had to do a lot of research on plotting points on a circle to figure out the correct coordinates.
   
-    <img alt="Original Look" height="300" src="images/original-look.png" width="300"/>
+    <img alt="Original Look" height="300" src="public/images/original-look.png" width="300"/>
   - Then I decided that my original Idea was good and all but I liked the look of a classic Color Wheel Design.
   
-    <img alt="Updated Look" height="300" src="images/updated-look.png" width="300"/>
+    <img alt="Updated Look" height="300" src="public/images/updated-look.png" width="300"/>
   - So This then really gave me More problems than I was looking for, but I was up for the challenge.
     - First, I decided to make them svg circles and have a dash offset to make the Individual pieces which made more problems with the hover effect I wanted to add which later gave more problems down the line.
     - So, in order to solve that i found a stack overflow forum about svg paths and seeing people making pie slices with those. So I decided that was the way to go for this project.

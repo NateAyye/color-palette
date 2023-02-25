@@ -78,29 +78,41 @@ const pieChart = {
     return {x1:x1,y1:y1,x2:x2,y2:y2}
   },
 
-  convertToRadian: function(angle) {
-    return angle * (Math.PI / 180);
-  },
-
   convertCentralAngle: function(arcLength, radius) {
     return arcLength / radius
   },
 
-  createChart(baseSize, size, thickness, sliceClass, gap, slices, index, layers, backgroundColor) {
-    const r = size / 2 - 10;
-    const sliceAngle = 360 / slices;
-    const w = thickness
+  /**
+   *
+   * @param bS The x and y diameter of the outside pie Chart.
+   * @param cS The current Size of the pieChart ( used in recursion when layers > 1 )
+   * @param w The thickness of each layer in pixels
+   * @param sC the css class for each individual layerSlice ( format for id : 'color-(layerIndex)-(currentRadius)')
+   * @param g the gap in between each slice and layer
+   * @param n how many slices the circle be split into.
+   * @param ind The current layer of the Circle (Used For Recursion).
+   * @param l How many layers will the pie chart go down.
+   * @param c Background Color of all the slices/layers, default if the colorWheel.
+   * @param sW
+   * @param o
+   * @returns {{ss: string, innerHTML: string}} ss - the style Sheet needed for the paths , the innerHTML is all the paths in a string template.
+   *
+   */
+  createChart(bS, cS, w, sC, g, n, ind, l, c, sW, o) {
+    const r = cS / 2 - 10, sliceAngle = 360 / n;
+    let innerHTML = ``, ss = ``;
 
-    let innerHTML = ``
-    let ss = ``
+    for (let i = 0; i < n; i++ ) {
 
-    for (let i = 0; i < slices; i++ ) {
-      const outerCircle = this.pointConversion(baseSize / 2,baseSize / 2, r, sliceAngle ,this.convertCentralAngle(gap, r), i)
-      const innerCircle = this.pointConversion(baseSize / 2,baseSize / 2, r - w, sliceAngle,this.convertCentralAngle(gap, r), i)
+      const outerCircle = this.pointConversion(bS / 2,bS / 2, r, sliceAngle ,this.convertCentralAngle(g, r), i)
+      const innerCircle = this.pointConversion(bS / 2,bS / 2, r - w, sliceAngle,this.convertCentralAngle(g, r), i)
+      const tOriginX = bS / 2 + (r - w / 3) * Math.cos(((((sliceAngle * i) + (sliceAngle / 2))) * Math.PI / 180) + (this.convertCentralAngle(g, r) / 2 ));
+      const tOriginY = bS / 2 + (r - w / 3) * Math.sin(((((sliceAngle * i) + (sliceAngle / 2))) * Math.PI / 180)  + (this.convertCentralAngle(g, r) / 2)) ;
       innerHTML +=  `
         <path 
-          id='color-${i}-${r}' 
-          class="${sliceClass}"
+          id='color-${i + 1}-${r}' 
+          class="${sC}"
+          data-circle-id="circle-${i + 1}-${r}"
           d="
             M ${outerCircle.x1} ${outerCircle.y1} 
             A ${r} ${r} 0 0 1 ${outerCircle.x2} ${outerCircle.y2} 
@@ -109,20 +121,14 @@ const pieChart = {
             z"  
           stroke="white" 
           stroke-linecap="round" 
-          fill='${backgroundColor !== '' ? backgroundColor : `hsl(${(360 / slices) * i} 100% ${10 + ((90 / layers) * index)}%)`}' 
-          stroke-width="0"
+          fill='${c !== '' ? c : `hsl(${(360 / n) * i} 100% ${10 + ((90 / l) * ind)}%)`}' 
+          stroke-width="${sW}"
         />
+        ${o ? `<circle id='circle-${i + 1}-${r}' cy="${tOriginY}" cx="${tOriginX}" r="2" fill="black" />` : ''}
       `
-      const tOriginX = baseSize / 2 + (r - w / 3) * Math.cos(((((sliceAngle * i) + (sliceAngle / 2))) * Math.PI / 180) + (this.convertCentralAngle(gap, r) / 2 ));
-      const tOriginY = baseSize / 2 + (r - w / 3) * Math.sin(((((sliceAngle * i) + (sliceAngle / 2))) * Math.PI / 180)  + (this.convertCentralAngle(gap, r) / 2)) ;
-
-      // Origin Test
-      // innerHTML += `
-      //   <circle cy="${tOriginY}" cx="${tOriginX}" r="2" />
-      // `
 
       ss += `
-        #color-${i}-${r} {
+        #color-${i + 1}-${r} {
           position: absolute;
           transform-origin: ${tOriginX}px ${tOriginY}px;
         }
@@ -133,9 +139,11 @@ const pieChart = {
 
   },
 
-  colorWheel: function(size, id, sliceClass,thickness , gap, layers, backgroundColor = '', slices = 12) {
+  colorWheel: function(s, id, sliceClass,thickness , gap, layers, strokeWidth = 0, backgroundColor = '', slices = 12, showOrigin = false) {
     const pieChart = document.createElement('div')
     pieChart.id = id;
+    const r = s / 2
+    thickness = ((r * .9) - (gap * layers)) / layers
     const ss = document.createElement('style')
     ss.innerHTML += `
       *,
@@ -148,6 +156,9 @@ const pieChart = {
       body {
         background: #22222288;
         min-height: 100vh;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
       }
       
       .alert {
@@ -175,11 +186,6 @@ const pieChart = {
         background: #a0ffff;
       }
       
-      #color-wheel{
-        position: absolute;
-        top: ${window.innerHeight / 2 - (size / 2)}px;
-        left: ${window.innerWidth / 2 - (size / 2)}px;
-      }
       path {
         position: relative;
       }
@@ -192,35 +198,44 @@ const pieChart = {
     let innerHTML = ``
 
     for (let i = 0; i < layers; i++) {
+      const thicknessHolder = thickness
+      if ( i + 1 === layers ) {
+        thickness = (s - (i * (thicknessHolder * 2 + (gap * 2)))) / 2 * 0.5;
+      }
       innerHTML += this.createChart(
-        size,
-        size - (i * (thickness * 2 + gap)),
+        s,
+        s - (i * (thicknessHolder * 2 + (gap * 2))),
         thickness,
         sliceClass,
         gap,
         slices,
         i,
         layers,
-        backgroundColor
+        backgroundColor,
+        strokeWidth,
+        showOrigin
       ).innerHTML
 
-      ss.innerHTML += this.createChart(size,
-        size - (i * (thickness * 2 + gap)),
+      ss.innerHTML += this.createChart(
+        s,
+        s - (i * (thicknessHolder * 2 + (gap * 2))),
         thickness,
         sliceClass,
         gap,
         slices,
         i,
         layers,
-        backgroundColor
+        backgroundColor,
+        strokeWidth,
+        showOrigin
       ).ss
     }
 
     pieChart.innerHTML = `
       <svg  
-        width="${size}"
-        height="${size}" 
-        viewBox="0 0 ${size} ${size}" 
+        width="${s}"
+        height="${s}" 
+        viewBox="0 0 ${s} ${s}" 
         xmlns="http://www.w3.org/2000/svg" 
       >
         ${innerHTML}
@@ -232,17 +247,16 @@ const pieChart = {
   }
 }
 
-
-
 pieChart.colorWheel(
-  550,
+  600,
   'color-wheel',
   'colors',
-  25,
+  20,
   4,
   9,
+  1,
   '',
-  24
+  24,
 )
 
 new ColorFormat()
@@ -271,7 +285,12 @@ colors.forEach(color => {
   })
 
   color.addEventListener('mouseover', (ev) => {
+    const tempCircle = document.getElementById(color.getAttribute('data-circle-id'))
     const tempColor = color;
+    if (tempCircle) {
+      document.getElementById(color.getAttribute('data-circle-id')).remove()
+      document.querySelector('#color-wheel svg ').appendChild(tempCircle)
+    }
     color.remove()
     document.querySelector('#color-wheel svg ').appendChild(tempColor)
   })
