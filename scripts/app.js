@@ -65,8 +65,11 @@ class Alert extends Component {
 class ColorWheel extends Component {
 
   layersList = []
-  constructor (parentId, id, size, gap, layers, slices) {
+  constructor (parentId, id, size, gap, layers, slices, isReRendering) {
     super(parentId,false);
+    if ( !isReRendering && window.innerWidth < 700 ) {
+      size = window.innerWidth
+    }
     this.id = id;
     this.size = size;
     this.gap = gap;
@@ -136,7 +139,7 @@ class ColorWheel extends Component {
       document.querySelector(`.main svg`).append(tempPath)
     })
 
-    path.addEventListener('click', ev => {
+    path.addEventListener('click', () => {
       const rgbString = getComputedStyle(path).fill
       const select = document.getElementById('color-space')
       let colorFunction
@@ -188,7 +191,7 @@ class ColorWheel extends Component {
       // document.body.append(testDiv)
 
       navigator.clipboard.writeText(colorFunction)
-        .then(r => {
+        .then(() => {
           new Alert('outer', `Copied!! ${colorFunction}`)
         })
         .catch(err => console.log(err))
@@ -306,7 +309,7 @@ class SideBarToggleButton extends Component {
       </g>
     </g>
     `
-    button.addEventListener('click', ev => {
+    button.addEventListener('click', () => {
       const aside = document.querySelector('.side-bar')
       aside.classList.toggle('active');
     })
@@ -631,7 +634,7 @@ class App {
   static id = 'app'
   static colorWheelId = 'main'
   static init() {
-    this.element = new ColorWheel('app', 'main', this.size, this.gap, this.layers, this.slices)
+    this.element = new ColorWheel('app', 'main', this.size, this.gap, this.layers, this.slices, false)
     // new ColorFormat()
     new NavBar('app', 'nav')
     new SettingsBar('app', 'settings', this.sliders )
@@ -645,7 +648,7 @@ class App {
     const layers = document.getElementById('layers').value;
     const slices = document.getElementById('slices').value;
     this.element.rootElement.remove()
-    this.element = new ColorWheel(this.id, this.colorWheelId, size, gap, layers, slices)
+    this.element = new ColorWheel(this.id, this.colorWheelId, size, gap, layers, slices, true)
   }
 }
 
