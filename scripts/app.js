@@ -332,7 +332,7 @@ class NavBar extends Component {
 
   renderBrand() {
     const img =document.createElement('img');
-    img.src = "public/svg/Brand.svg";
+    img.src = "/public/svg/Brand.svg";
     img.height = 50;
     img.width = 100;
     return img
