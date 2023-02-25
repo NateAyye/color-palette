@@ -73,8 +73,10 @@ class ColorWheel extends Component {
     this.layers = layers;
     this.slices = slices;
     this.radius = size / 2;
+    this.currColorPickerRadius = (this.size * .035)
     this.thickness = ((this.radius * .9) - (gap * layers)) / layers;
     this.render();
+    this.createColorPicker()
   }
 
   convertCentralAngle(arcLength, radius) {
@@ -88,6 +90,18 @@ class ColorWheel extends Component {
     const y2 = (this.size / 2) + radius * Math.sin(((sliceAngle * (index + 1)) * Math.PI / 180));
 
     return {x1:x1,y1:y1,x2:x2,y2:y2}
+  }
+
+  createColorPicker() {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    circle.setAttribute('id', 'color-picker')
+    circle.setAttribute('cy' , `${this.size / 2}`);
+    circle.setAttribute('cx' , `${this.size / 2}`);
+    circle.setAttribute('r' , `${this.currColorPickerRadius}`);
+    circle.setAttribute('fill', 'white')
+    circle.setAttribute('stroke', 'gray')
+    circle.setAttribute('stroke-width', '2')
+    this.svg.append(circle)
   }
 
   createPath(index, radius, sliceAngle, layer) {
@@ -104,7 +118,7 @@ class ColorWheel extends Component {
       M ${outerLine.x1} ${outerLine.y1}
       A ${radius} ${radius} 0 0 1 ${outerLine.x2} ${outerLine.y2} 
       L ${innerLine.x2} ${innerLine.y2} 
-      A ${(radius * 2 - this.thickness) / 2} ${(radius * 2 - this.thickness) / 2} 0 0 0 ${innerLine.x1} ${innerLine.y1}
+      A ${(radius - this.thickness)} ${(radius - this.thickness)} 0 0 0 ${innerLine.x1} ${innerLine.y1}
       z 
     `)
     path.setAttribute('stroke', 'white');
@@ -113,6 +127,9 @@ class ColorWheel extends Component {
     path.style.transformOrigin = `${tOriginX}px ${tOriginY}px`
 
     path.addEventListener('mouseover', ev => {
+      const colorPicker = document.getElementById('color-picker')
+      colorPicker.setAttribute('fill', ev.target.getAttribute('fill'))
+
       const tempPath = path;
       path.remove()
       document.querySelector(`.main svg`).append(tempPath)
@@ -133,7 +150,7 @@ class ColorWheel extends Component {
           colorFunction = rgbString
       }
 
-      const tetradicDegrees = 80
+      const tetradicDegrees = 85
       const fluff = ['hsl','(', ')']
       const originalHue = path.getAttribute('fill');
       let hue = path.getAttribute('fill');
@@ -209,7 +226,7 @@ class ColorWheel extends Component {
     }`, 0)
 
     this.ss.insertRule(`.main path:hover {
-      transform: scale(1.5);
+      transform: scale(2);
     }`, 0)
 
     this.ss.insertRule(`.alert {
