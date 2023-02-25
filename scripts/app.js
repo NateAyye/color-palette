@@ -101,9 +101,9 @@ class ColorWheel extends Component {
     circle.setAttribute('id', 'color-picker')
     circle.setAttribute('cy' , `${this.size / 2}`);
     circle.setAttribute('cx' , `${this.size / 2}`);
-    circle.setAttribute('r' , `${this.currColorPickerRadius}`);
+    circle.setAttribute('r' , `${this.currColorPickerRadius - 1}`);
     circle.setAttribute('fill', 'white')
-    circle.setAttribute('stroke', 'gray')
+    circle.setAttribute('stroke', '#44444488')
     circle.setAttribute('stroke-width', '2')
     svg.append(circle)
   }
@@ -154,6 +154,8 @@ class ColorWheel extends Component {
           colorFunction = rgbString
       }
 
+
+
       const tetradicDegrees = 85
       const fluff = ['hsl','(', ')']
       const originalHue = path.getAttribute('fill');
@@ -181,14 +183,6 @@ class ColorWheel extends Component {
         hexValueElement.innerHTML = ColorHelper.CssHSLToHex(hslStringArray[i])
         rect.setAttribute('fill', hslStringArray[i])
       })
-
-
-      // const testDiv = document.createElement('div')
-      // testDiv.style.height = 20 + 'px';
-      // testDiv.style.width = 20 + 'px';
-      // testDiv.style.background = oppositeHslString;
-      //
-      // document.body.append(testDiv)
 
       navigator.clipboard.writeText(colorFunction)
         .then(() => {
@@ -342,6 +336,7 @@ class NavBar extends Component {
       </select>
     `
     document.styleSheets[0].insertRule(`#nav #select h3 {
+      font-size: 1em;
       font-family: inherit;
       background: #444444cc;
       color: white;
@@ -639,14 +634,30 @@ class App {
     new NavBar('app', 'nav')
     new SettingsBar('app', 'settings', this.sliders )
     new TetradicPalette('app','tetradic')
+    this.windowResizeHandler()
+  }
+
+  static windowResizeHandler() {
+    window.onresize = (ev) => {
+      if ( this.size > window.innerWidth) {
+        this.reInit(true)
+      }
+    }
   }
 
 
-  static reInit() {
-    const size = document.getElementById('size').value;
+  static reInit(resize = false) {
+    let size = document.getElementById('size').value;
     const gap = document.getElementById('gap').value;
     const layers = document.getElementById('layers').value;
     const slices = document.getElementById('slices').value;
+    if (resize) {
+      size = window.innerWidth * .9
+      const sizeSlider = document.getElementById('size')
+      console.log(sizeSlider.previousSibling)
+      sizeSlider.previousSibling.innerText = `Size: ${size.toFixed(0)}`
+      sizeSlider.value = size
+    }
     this.element.rootElement.remove()
     this.element = new ColorWheel(this.id, this.colorWheelId, size, gap, layers, slices, true)
   }
