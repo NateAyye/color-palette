@@ -132,7 +132,7 @@ class ColorWheel extends Component {
           colorFunction = rgbString
       }
 
-      const tetradicDegrees = 40
+      const tetradicDegrees = 80
       const fluff = ['hsl','(', ')']
       const originalHue = path.getAttribute('fill');
       let hue = path.getAttribute('fill');
@@ -332,7 +332,7 @@ class NavBar extends Component {
 
   renderBrand() {
     const img =document.createElement('img');
-    img.src = "../../public/svg/Brand.svg";
+    img.src = "public/svg/Brand.svg";
     img.height = 50;
     img.width = 100;
     return img
