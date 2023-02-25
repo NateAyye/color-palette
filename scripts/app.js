@@ -94,6 +94,7 @@ class ColorWheel extends Component {
 
   createColorPicker() {
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+    const svg = document.getElementById('color-wheel')
     circle.setAttribute('id', 'color-picker')
     circle.setAttribute('cy' , `${this.size / 2}`);
     circle.setAttribute('cx' , `${this.size / 2}`);
@@ -101,7 +102,7 @@ class ColorWheel extends Component {
     circle.setAttribute('fill', 'white')
     circle.setAttribute('stroke', 'gray')
     circle.setAttribute('stroke-width', '2')
-    this.svg.append(circle)
+    svg.append(circle)
   }
 
   createPath(index, radius, sliceAngle, layer) {
