@@ -67,7 +67,7 @@ class ColorWheel extends Component {
   layersList = []
   constructor (parentId, id, size, gap, layers, slices, isReRendering) {
     super(parentId,false);
-    if ( !isReRendering && window.innerWidth < 700 ) {
+    if ( !isReRendering && size < 700 ) {
       size = window.innerWidth
     }
     this.id = id;
@@ -103,8 +103,6 @@ class ColorWheel extends Component {
     circle.setAttribute('cx' , `${this.size / 2}`);
     circle.setAttribute('r' , `${this.currColorPickerRadius - 1}`);
     circle.setAttribute('fill', 'white')
-    circle.setAttribute('stroke', '#44444488')
-    circle.setAttribute('stroke-width', '2')
     svg.append(circle)
   }
 
@@ -126,7 +124,7 @@ class ColorWheel extends Component {
       z 
     `)
     path.setAttribute('stroke', 'white');
-    path.setAttribute('fill', `hsl(${(360 / this.slices) * index} 100% ${5 + ((95 / this.layers) * layer)}%)`)
+    path.setAttribute('fill', `hsl(${(360 / this.slices) * index} 100% ${10 + ((90 / this.layers) * layer)}%)`)
     path.setAttribute('stroke-width', '0')
     path.style.transformOrigin = `${tOriginX}px ${tOriginY}px`
 
@@ -206,21 +204,18 @@ class ColorWheel extends Component {
   }
 
   render() {
+    const baseSize = this.size
     this.rootElement = this.createComponent('div', this.id);
+    this.rootElement.style.width = `${baseSize}px`
+    this.rootElement.style.height = `${baseSize}px`
     this.svg = this.createSVG(this.size,this.size, 'color-wheel')
     this.ss = document.styleSheets[0];
-    const baseSize = this.size
 
     this.ss.insertRule(`body {
         background: #22222288;
         min-height: 100vh;
         display: grid;
         place-items: center;
-    }`, 0)
-
-    this.ss.insertRule(`.${this.id} {
-      width: ${this.size}px;
-      height: ${this.size}px;
     }`, 0)
 
     this.ss.insertRule(`.main path:hover {
@@ -579,7 +574,8 @@ class TetradicPalette extends Component{
       rect.setAttribute('fill', 'white')
       rect.setAttribute('rx', '10')
       mainColor.setAttribute('fill', 'red')
-
+      mainColor.style.borderRadius = '10px'
+      mainColor.style.boxShadow = `-3px -3px 9px hsla(255,0%,100%,0.3), 3px 3px 9px hsla(94,0%,0%,.6)`;
 
 
       mainColor.append(rect);
@@ -602,7 +598,7 @@ class App {
     },
     {
       name: 'gap',
-      defaultValue: 1,
+      defaultValue: 0,
       step: 1,
       maxValue: 5,
       minValue: 0,
@@ -623,12 +619,15 @@ class App {
     },
   ]
   static size = 700;
-  static gap = 1;
+  static gap = 0;
   static layers = 20;
   static slices = 48;
   static id = 'app'
   static colorWheelId = 'main'
+
+  static resizeTimer
   static init() {
+    this.size = window.innerWidth > 1000 ? 1000 : window.innerWidth;
     this.element = new ColorWheel('app', 'main', this.size, this.gap, this.layers, this.slices, false)
     // new ColorFormat()
     new NavBar('app', 'nav')
@@ -639,9 +638,12 @@ class App {
 
   static windowResizeHandler() {
     window.onresize = (ev) => {
-      if ( this.size > window.innerWidth) {
-        this.reInit(true)
-      }
+      clearTimeout(this.resizeTimer)
+      this.resizeTimer = setTimeout(() => {
+        if ( this.size + 250 > window.innerWidth ) {
+          this.reInit(true)
+        }
+      }, 500)
     }
   }
 
@@ -652,9 +654,8 @@ class App {
     const layers = document.getElementById('layers').value;
     const slices = document.getElementById('slices').value;
     if (resize) {
-      size = window.innerWidth * .9
+      size =  window.innerWidth > 1000 ? 1000 : window.innerWidth
       const sizeSlider = document.getElementById('size')
-      console.log(sizeSlider.previousSibling)
       sizeSlider.previousSibling.innerText = `Size: ${size.toFixed(0)}`
       sizeSlider.value = size
     }
